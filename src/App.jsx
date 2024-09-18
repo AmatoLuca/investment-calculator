@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Header from './components/Header';
 import UserInput from './components/UserInput';
 import Results from './components/Results';
+import Message from './components/Message';
 
 function App() {
   const [userInput, setUserInput] = useState({
@@ -11,11 +12,13 @@ function App() {
     duration: 10,
   });
 
+  const inputIsValid = userInput.duration >= 1;
+
   const handleChange = useCallback((inputIdentifier, newValue) => {
     setUserInput((prevUserInput) => {
       return {
         ...prevUserInput,
-        [inputIdentifier]: newValue,
+        [inputIdentifier]: +newValue,
       };
     });
   }, []);
@@ -23,7 +26,8 @@ function App() {
     <>
       <Header />
       <UserInput userInput={userInput} onChange={handleChange} />
-      <Results userInput={userInput} />
+      {!inputIsValid && <Message />}
+      {inputIsValid && <Results userInput={userInput} />}
     </>
   );
 }
